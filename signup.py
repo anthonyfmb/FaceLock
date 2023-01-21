@@ -23,11 +23,11 @@ class SignupToolBox:
         self.img_count = img_count
         self.face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-        if "test" in os.listdir("/"):
+        if "test" in os.listdir("./"):
             shutil.rmtree("test")
-        if "train" in os.listdir("/"):
+        if "train" in os.listdir("./"):
             shutil.rmtree("train")
-        if "valid_user" in os.listdir("/"):
+        if "valid_user" in os.listdir("./"):
             shutil.rmtree("valid_user")
 
     def create_password(self, password_length):
@@ -125,12 +125,16 @@ class SignupToolBox:
         self.model = model
 
     def collect_valid_user_data(self):
-        cap = cv2.VideoCapture(0)
+        camera = cv2.VideoCapture(0)
         valid_user_dir = "valid_user"
         Path(valid_user_dir).mkdir(parents=True, exist_ok=True)
         cv2.startWindowThread()
+        camera.set(3, 640)
+        camera.set(4, 480)
+
+        count = 0
         while True:
-            read_ok, img = cap.read()
+            read_ok, img = camera.read()
             gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             faces = self.face_classifier.detectMultiScale(
@@ -145,7 +149,9 @@ class SignupToolBox:
                     cv2.imwrite(os.path.join(valid_user_dir, f"{count}.png"), img[y:y+h,x:x+w])
                     count += 1
                 else:
-                    break
+                    cv2.destroyAllWindows()
+                    return 
                 cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.imshow('Face Detector', img)
-    cv2.destroyAllWindows()
+        
+        
