@@ -16,6 +16,11 @@ def removeIdentifierFile(path):
         if file.find(".Identifier") != -1:
             os.remove(os.path.join(path, file))
 
+def run():
+    box = SignupToolBox(500)
+    box.collect_valid_user_data()
+    return box.create_password(20)
+
 class SignupToolBox:
     def __init__(self, img_count):
         self.password = None
