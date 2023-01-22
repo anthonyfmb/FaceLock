@@ -6,7 +6,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap
 from multiprocessing import Process, Queue
-from signup import run
+# from signup import run
+from threading import Thread
+from time import sleep
 
 # class WelcomeScreen(QDialog):
 #     def __init__(self):
@@ -37,9 +39,17 @@ def on_chrome_clicked():
     t.start()
 
 def on_sign_up_clicked():
-    t = threading.Thread(target=run)
-    t.daemon = True
-    t.start()
+    output = subprocess.run(["python3", "signup.py"], capture_output=True)
+    # stdout_index = output.find("stdout=b'")
+    # end_index = output.find("',", stdout_index)
+    # stdout_index = (stdout_index + len("stdout=b'"))
+    # print(f"test: {output[stdout_index:end_index]}")
+    print(output.stdout)
+
+    # t = threading.Thread(target=run)
+    # t.daemon = True
+    # t.start()
+
     #queue = Queue()
     # p = Process(target=run,args=())
     # p.start()

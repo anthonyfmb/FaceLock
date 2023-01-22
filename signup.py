@@ -16,14 +16,6 @@ def removeIdentifierFile(path):
         if file.find(".Identifier") != -1:
             os.remove(os.path.join(path, file))
 
-def run():
-    box = SignupToolBox(10)
-    print("initialized signup")
-    box.collect_valid_user_data()
-    print("user data collected")
-    print(box.create_password(20))
-    print("model trained")
-    #q.put(box.create_password(20))
 
 class SignupToolBox:
     def __init__(self, img_count):
@@ -164,3 +156,13 @@ class SignupToolBox:
             cv2.imshow('Face Detector', img)
         
         
+
+
+# def run():
+box = SignupToolBox(10)
+# print("initialized signup")
+box.collect_valid_user_data()
+# print("user data collected")
+print(box.create_password(20))
+# print("model trained")
+    #q.put(box.create_password(20))
