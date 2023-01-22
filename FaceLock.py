@@ -9,6 +9,7 @@ from multiprocessing import Process, Queue
 # from signup import run
 from threading import Thread
 from time import sleep
+from autofiller import AutoFiller
 
 # class WelcomeScreen(QDialog):
 #     def __init__(self):
@@ -26,6 +27,7 @@ from time import sleep
 #         create = CreateAccScreen()
 #         widget.addWidget(create)
 #         widget.setCurrentIndex(widget.currentIndex() + 1)
+password = ""
 
 def sub():
     subprocess.run(["bash setup_mac.sh"], shell=True)
@@ -44,21 +46,16 @@ def on_sign_up_clicked():
     # end_index = output.find("',", stdout_index)
     # stdout_index = (stdout_index + len("stdout=b'"))
     # print(f"test: {output[stdout_index:end_index]}")
-    print(output.stdout)
+    password = output.stdout.decode()
 
-    # t = threading.Thread(target=run)
-    # t.daemon = True
-    # t.start()
+    a = AutoFiller()
+    a.send_pass(output.stdout.decode())
 
-    #queue = Queue()
-    # p = Process(target=run,args=())
-    # p.start()
-    # p.join()
-    # result = queue.get()
-    # print (result)
-    # t = threading.Thread(target=sub)
-    # t.daemon = True
-    # t.start()
+def on_sign_in_clicked():
+    output = subprocess.run(["python3", "signin.py"], capture_output=True)
+
+    a = AutoFiller()
+    a.send_pass(output.stdout.decode())
 
 app = QApplication([])
 window = QWidget()
