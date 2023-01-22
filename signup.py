@@ -150,13 +150,20 @@ class SignupToolBox:
                     cv2.imwrite(os.path.join(valid_user_dir, f"{count}.png"), img[y:y+h,x:x+w])
                     count += 1
                 else:
-                    cv2.destroyAllWindows()
-                    return 
+                    camera.release()
+                    break 
                 cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.imshow('Face Detector', img)
+            else:
+                cv2.imshow('Face Detector', img)
+                if cv2.waitKey(1) & 0xFF == ord('x'):
+                    break
+                continue
+            break
         
-        
-
+        camera.release()
+        cv2.waitKey(1)
+        cv2.destroyAllWindows()
+        cv2.waitKey(1)
 
 # def run():
 box = SignupToolBox(10)
