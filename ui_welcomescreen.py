@@ -41,15 +41,3 @@ class Ui_Dialog(object):
         self.create.setStyleSheet("border-radius:20px;\n"
 "background-color: rgb(170, 255, 255);\n"
 "font: 14pt \"MS Shell Dlg 2\";")
-        self.create.setObjectName("create")
-
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
-
-    def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label_2.setText(_translate("Dialog", "Sign in or create a new account"))
-        self.chrome.setText(_translate("Dialog", "Launch Chrome"))
-        self.login.setText(_translate("Dialog", "Sign In"))
-        self.create.setText(_translate("Dialog", "Sign Up"))

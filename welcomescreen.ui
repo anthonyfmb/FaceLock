@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>800</height>
+    <width>400</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,22 +26,6 @@
     <string notr="true">QWidget#bgwidget{
 background-color:qlineargradient(spread:pad, x1:0.091, y1:0.101636, x2:0.991379, y2:0.977, stop:0 rgba(209, 107, 165, 255), stop:1 rgba(255, 255, 255, 255));}</string>
    </property>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>120</y>
-      <width>251</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 36pt &quot;MS Shell Dlg 2&quot;; color:rgb(255, 255, 255)</string>
-    </property>
-    <property name="text">
-     <string>Welcome</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
@@ -58,13 +42,13 @@ background-color:qlineargradient(spread:pad, x1:0.091, y1:0.101636, x2:0.991379,
      <string>Sign in or create a new account</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="login">
+   <widget class="QPushButton" name="chrome">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>390</y>
-      <width>341</width>
-      <height>51</height>
+      <x>50</x>
+      <y>20</y>
+      <width>150</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -73,15 +57,33 @@ background-color: rgb(170, 255, 255);
 font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="text">
-     <string>Log in</string>
+     <string>Launch Chrome</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="login">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>100</y>
+      <width>150</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius:20px;
+background-color: rgb(170, 255, 255);
+font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Sign In</string>
     </property>
    </widget>
    <widget class="QPushButton" name="create">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>480</y>
-      <width>341</width>
+      <x>50</x>
+      <y>180</y>
+      <width>150</width>
       <height>51</height>
      </rect>
     </property>
@@ -91,7 +93,7 @@ background-color: rgb(170, 255, 255);
 font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="text">
-     <string>Create a new account</string>
+     <button>Sign Up</button>
     </property>
    </widget>
   </widget>
