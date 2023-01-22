@@ -52,19 +52,19 @@ class SigninToolBox:
                     2
                    )
         if (id == 1):
-          # camera.release()
+          camera.release()
           user = 1
-          # break
-      # else:
-      #   cv2.imshow('Face Detector', img)
-      #   if cv2.waitKey(1) & 0xFF == ord('x'):
-      #     break
-      #   continue
-      cv2.imshow('Face Detector', img)
-      if cv2.waitKey(1) & 0xFF == ord('x'):
-        break
-      continue
-      # break
+          break
+      else:
+        cv2.imshow('Face Detector', img)
+        if cv2.waitKey(1) & 0xFF == ord('x'):
+          break
+        continue
+      # cv2.imshow('Face Detector', img)
+      # if cv2.waitKey(1) & 0xFF == ord('x'):
+      #   break
+      # continue
+      break
 
     camera.release()
     cv2.waitKey(1)

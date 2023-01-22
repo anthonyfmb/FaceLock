@@ -38,8 +38,8 @@ class SignupToolBox:
             shutil.rmtree("test")
         if "train" in os.listdir("./"):
             shutil.rmtree("train")
-        # if "valid_user" in os.listdir("./"):
-        #     shutil.rmtree("valid_user")
+        if "valid_user" in os.listdir("./"):
+            shutil.rmtree("valid_user")
 
     def create_password(self, password_length):
         letters = string.ascii_letters
@@ -54,13 +54,17 @@ class SignupToolBox:
         url = 'http://localhost:8000/customers/'
         hostname = socket.gethostname()   
         ip = socket.gethostbyname(hostname)
+
         data = {'name': ip, 'password': password}
+        resp = requests.post(url, json = data)
+        resp = resp.content.decode()
+        id_i = resp.find("id")
+        end_i = resp.find(",", id_i)
+        id = resp[id_i + 4:end_i]
 
-        x = requests.post(url, json = data)
-
-        # f = open("password.txt", "w")
-        # f.write(password)
-        # f.close()
+        f = open("id.txt", "w")
+        f.write(id)
+        f.close()
         return password
 
     def train(self):
@@ -232,7 +236,7 @@ box = SignupToolBox(500)
 box.collect_valid_user_data()
 # box.train()
 box.train()
-# print(box.test())
+print(box.test())
 # print("user data collected")
 print(box.create_password(20))
 # print("model trained")

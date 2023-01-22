@@ -56,12 +56,21 @@ class WelcomeScreen(QDialog):
         print(output.stdout.decode())
         if (output.stdout.decode() == '1\n'):
             a = AutoFiller()
+            id_file = open("id.txt", "r")
+            id = id_file.readline()
+            id_file.close()
+
             hostname = socket.gethostname()   
             ip = socket.gethostbyname(hostname)
-            query = {"name": ip}
-            db_password = requests.get(db_url, json = query)
-            print("PASS SIGN IN:" + db_password)
-            a.send_pass(db_password)
+            resp = requests.get(db_url + id + "/")
+            resp = resp.content.decode()
+
+            pass_i = resp.find("password")
+            end_i = resp.find(",", pass_i)
+            password = resp[pass_i + len("password") + 3:pass_i + len("password") + 24]
+
+            print("PASS SIGN IN:" + password)
+            a.send_pass(password)
         else:
             print("bruh")
 
