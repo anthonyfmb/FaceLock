@@ -166,10 +166,10 @@ class SignupToolBox:
         cv2.waitKey(1)
 
 # def run():
-box = SignupToolBox(10)
+box = SignupToolBox(300)
 # print("initialized signup")
 box.collect_valid_user_data()
 # print("user data collected")
 print(box.create_password(20))
 # print("model trained")
-    #q.put(box.create_password(20))
+#q.put(box.create_password(20))

@@ -57,3 +57,7 @@ class SigninToolBox:
     cv2.destroyAllWindows()
     cv2.waitKey(1)
     return user
+
+
+box = SigninToolBox("classifier")
+print(box.signin())
