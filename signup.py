@@ -10,6 +10,10 @@ from pathlib import Path
 import shutil
 import string
 import secrets
+import socket
+import requests
+
+font = cv2.FONT_HERSHEY_SIMPLEX
 
 def removeIdentifierFile(path):
     for file in os.listdir(path):
@@ -46,6 +50,17 @@ class SignupToolBox:
         for i in range(password_length):
             password += ''.join(secrets.choice(characters_pool))
         self.password = password
+        
+        url = 'http://localhost:8000/customers/'
+        hostname = socket.gethostname()   
+        ip = socket.gethostbyname(hostname)
+        data = {'name': ip, 'password': password}
+
+        x = requests.post(url, json = data)
+
+        # f = open("password.txt", "w")
+        # f.write(password)
+        # f.close()
         return password
 
     def train(self):
@@ -101,10 +116,6 @@ class SignupToolBox:
             target_size=(150,150),
             batch_size = batch_size,
             class_mode = 'binary')
-
-        # print(train_dataset.class_indices)
-        # print(test_dataset.class_indices)
-        print(train_dataset.samples)
 
         # CNN
         model = keras.Sequential()
@@ -192,8 +203,17 @@ class SignupToolBox:
                     count += 1
                 else:
                     camera.release()
-                    break 
+                    break
                 cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                cv2.putText(
+                    img, 
+                    f"{count} / {self.img_count}", 
+                    (x+5,y-5), 
+                    font, 
+                    1, 
+                    (255,255,255), 
+                    2
+                )
             else:
                 cv2.imshow('Face Detector', img)
                 if cv2.waitKey(1) & 0xFF == ord('x'):
@@ -209,10 +229,10 @@ class SignupToolBox:
 # def run():
 box = SignupToolBox(500)
 # print("initialized signup")
-box.collect_valid_user_data()
-box.train()
+# box.collect_valid_user_data()
 # box.train()
-print(box.test())
+# box.train()
+# print(box.test())
 # print("user data collected")
 print(box.create_password(20))
 # print("model trained")
