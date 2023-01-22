@@ -16,6 +16,12 @@ def removeIdentifierFile(path):
         if file.find(".Identifier") != -1:
             os.remove(os.path.join(path, file))
 
+def predictImage(filename, model):
+    img1 = image.load_img(filename,target_size=(150,150)) 
+    Y = image.img_to_array(img1)
+    X = np.expand_dims(Y,axis=0)
+    val = model.predict(X, verbose=0)
+    return val[0][0]
 
 class SignupToolBox:
     def __init__(self, img_count):
@@ -28,8 +34,8 @@ class SignupToolBox:
             shutil.rmtree("test")
         if "train" in os.listdir("./"):
             shutil.rmtree("train")
-        if "valid_user" in os.listdir("./"):
-            shutil.rmtree("valid_user")
+        # if "valid_user" in os.listdir("./"):
+        #     shutil.rmtree("valid_user")
 
     def create_password(self, password_length):
         letters = string.ascii_letters
@@ -43,20 +49,22 @@ class SignupToolBox:
         return password
 
     def train(self):
+        batch_size = 32
+
         raw_imposters_folder = "imposters"
         raw_valid_user_folder = "valid_user"
         
         imposter_filenames = random.sample(os.listdir(raw_imposters_folder), self.img_count)
         valid_user_filenames = random.sample(os.listdir(raw_valid_user_folder), self.img_count)
 
-        train_valid_user_folder = "train/valid_user"
-        train_imposters_folder = "train/imposters"
+        train_valid_user_folder = "./train/valid_user"
+        train_imposters_folder = "./train/imposters"
 
         Path(train_valid_user_folder).mkdir(parents=True, exist_ok=True)
         Path(train_imposters_folder).mkdir(parents=True, exist_ok=True)
 
-        test_valid_user_folder = "test/valid_user"
-        test_imposters_folder = "test/imposters"
+        test_valid_user_folder = "./test/valid_user"
+        test_imposters_folder = "./test/imposters"
 
         Path(test_valid_user_folder).mkdir(parents=True, exist_ok=True)
         Path(test_imposters_folder).mkdir(parents=True, exist_ok=True)
@@ -76,23 +84,27 @@ class SignupToolBox:
         for valid_user_filename in valid_user_filenames[class_training_size:]:
             shutil.copy(os.path.join(raw_valid_user_folder, valid_user_filename), os.path.join(test_valid_user_folder, valid_user_filename))
 
-        removeIdentifierFile(train_imposters_folder)
-        removeIdentifierFile(test_imposters_folder)
-        removeIdentifierFile(train_valid_user_folder)
-        removeIdentifierFile(test_valid_user_folder)
+        # removeIdentifierFile(train_imposters_folder)
+        # removeIdentifierFile(test_imposters_folder)
+        # removeIdentifierFile(train_valid_user_folder)
+        # removeIdentifierFile(test_valid_user_folder)
 
         train = ImageDataGenerator(rescale=1/255)
         test = ImageDataGenerator(rescale=1/255)
 
         train_dataset = train.flow_from_directory("train",
             target_size=(150,150),
-            batch_size = 32,
+            batch_size = batch_size,
             class_mode = 'binary')
                                                 
         test_dataset = test.flow_from_directory("test",
             target_size=(150,150),
-            batch_size =32,
+            batch_size = batch_size,
             class_mode = 'binary')
+
+        # print(train_dataset.class_indices)
+        # print(test_dataset.class_indices)
+        print(train_dataset.samples)
 
         # CNN
         model = keras.Sequential()
@@ -117,13 +129,42 @@ class SignupToolBox:
         model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
 
         model.fit_generator(train_dataset,
-            steps_per_epoch = 250,
+            steps_per_epoch = train_dataset.samples // batch_size,
             epochs = 10,
             validation_data = test_dataset
         )
 
         model.save('classifier')
         self.model = model
+
+    def test(self):
+        test_imposter = "test/imposters"
+        test_valid_user = "test/valid_user"
+        correct_count = 0
+        wrong_count = 0
+        count = 0
+
+        for file in os.listdir(test_imposter):
+            id = predictImage(os.path.join(test_imposter, file), self.model)
+            count += 1
+            if id == 0:
+                correct_count += 1
+                print(f"{file} correct {id}")
+            else:
+                wrong_count += 1
+                print(f"{file} wrong {id}")
+
+
+        for file in os.listdir(test_valid_user):
+            id = predictImage(os.path.join(test_valid_user, file), self.model)
+            count += 1
+            if id == 1:
+                correct_count += 1
+                print(f"{file} correct {id}")
+            else:
+                wrong_count += 1
+                print(f"{file} wrong {id}")
+        return (correct_count / count)
 
     def collect_valid_user_data(self):
         camera = cv2.VideoCapture(0)
@@ -166,9 +207,12 @@ class SignupToolBox:
         cv2.waitKey(1)
 
 # def run():
-box = SignupToolBox(300)
+box = SignupToolBox(500)
 # print("initialized signup")
 box.collect_valid_user_data()
+box.train()
+# box.train()
+print(box.test())
 # print("user data collected")
 print(box.create_password(20))
 # print("model trained")

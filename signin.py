@@ -6,6 +6,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing import image
 
+font = cv2.FONT_HERSHEY_SIMPLEX
+
 class SigninToolBox:
   def __init__(self, model_dir):
     self.model = tf.keras.models.load_model(model_dir)
@@ -40,17 +42,29 @@ class SigninToolBox:
         X = np.expand_dims(Y, axis=0)
         id = self.model.predict(X, verbose = 0)
         cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
-
+        cv2.putText(
+                    img, 
+                    str(id), 
+                    (x+5,y-5), 
+                    font, 
+                    1, 
+                    (255,255,255), 
+                    2
+                   )
         if (id == 1):
-          camera.release()
+          # camera.release()
           user = 1
-          break
-      else:
-        cv2.imshow('Face Detector', img)
-        if cv2.waitKey(1) & 0xFF == ord('x'):
-          break
-        continue
-      break
+          # break
+      # else:
+      #   cv2.imshow('Face Detector', img)
+      #   if cv2.waitKey(1) & 0xFF == ord('x'):
+      #     break
+      #   continue
+      cv2.imshow('Face Detector', img)
+      if cv2.waitKey(1) & 0xFF == ord('x'):
+        break
+      continue
+      # break
 
     camera.release()
     cv2.waitKey(1)
