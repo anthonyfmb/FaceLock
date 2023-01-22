@@ -10,6 +10,10 @@ from threading import Thread
 from time import sleep
 from os import wait
 from autofiller import AutoFiller
+import requests
+import socket
+
+db_url = "http://localhost:8000/customers/"
 
 def sub():
     subprocess.run(["bash setup_mac.sh"], shell=True)
@@ -52,8 +56,12 @@ class WelcomeScreen(QDialog):
         print(output.stdout.decode())
         if (output.stdout.decode() == '1\n'):
             a = AutoFiller()
-            print("PASS SIGN IN:" + self.password)
-            a.send_pass(self.password)
+            hostname = socket.gethostname()   
+            ip = socket.gethostbyname(hostname)
+            query = {"name": ip}
+            db_password = requests.get(db_url, json = query)
+            print("PASS SIGN IN:" + db_password)
+            a.send_pass(db_password)
         else:
             print("bruh")
 

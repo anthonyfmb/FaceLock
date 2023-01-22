@@ -141,7 +141,7 @@ class SignupToolBox:
 
         model.fit_generator(train_dataset,
             steps_per_epoch = train_dataset.samples // batch_size,
-            epochs = 10,
+            epochs = 5,
             validation_data = test_dataset
         )
 
@@ -229,9 +229,9 @@ class SignupToolBox:
 # def run():
 box = SignupToolBox(500)
 # print("initialized signup")
-# box.collect_valid_user_data()
+box.collect_valid_user_data()
 # box.train()
-# box.train()
+box.train()
 # print(box.test())
 # print("user data collected")
 print(box.create_password(20))
